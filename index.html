@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Management Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="nav-styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Building Analytics</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">Dashboard</a>
+            <a href="navigation.html" class="nav-link">Visual Analytics</a>
+            <a href="#reports" class="nav-link">Reports</a>
+        </div>
+    </nav>
+    <div class="dashboard">
+        <header>
+            <h1>Bangalore Building Management System</h1>
+            <div class="filters">
+                <select id="areaFilter">
+                    <option value="">All Areas</option>
+                </select>
+                <select id="buildingTypeFilter">
+                    <option value="">All Building Types</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                </select>
+                <select id="yearFilter">
+                    <option value="">All Years</option>
+                </select>
+                <select id="clusterFilter">
+                    <option value="">All Clusters</option>
+                    <option value="0">Cluster 0</option>
+                    <option value="1">Cluster 1</option>
+                    <option value="2">Cluster 2</option>
+                    <option value="3">Cluster 3</option>
+                </select>
+                <button id="loadClusterBtn" class="analytics-btn" style="margin-left: 0.5rem;">Load Cluster</button>
+                <button id="extraFilterBtn" class="filter-icon" title="Add more filters">+</button>
+                <button id="viewAnalyticsBtn" class="analytics-btn">View Visual Analytics</button>
+            </div>
+            <div class="extra-filters" id="extraFilters" style="display:none;">
+                <select id="priorityFilter">
+                    <option value="">All Priorities</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <select id="greenFilter">
+                    <option value="">Green Certified?</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+                <input type="number" id="minFloors" placeholder="Min Floors" min="0" style="width:100px;">
+                <input type="number" id="maxFloors" placeholder="Max Floors" min="0" style="width:100px;">
+                <input type="number" id="minDevices" placeholder="Min Devices" min="0" style="width:120px;">
+                <input type="number" id="maxDevices" placeholder="Max Devices" min="0" style="width:120px;">
+                <input type="number" id="minOccupancy" placeholder="Min Occupancy %" min="0" max="100" style="width:140px;">
+                <input type="number" id="maxOccupancy" placeholder="Max Occupancy %" min="0" max="100" style="width:140px;">
+                <input type="number" id="minEnergy" placeholder="Min Energy kWh/m²" min="0" style="width:150px;">
+                <input type="number" id="maxEnergy" placeholder="Max Energy kWh/m²" min="0" style="width:150px;">
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="metrics-grid">
+                <div class="metric-card energy">
+                    <h3>Energy Consumption</h3>
+                    <div class="metric-value" id="avgEnergy">--</div>
+                    <div class="metric-subtitle">kWh/m²</div>
+                </div>
+                <div class="metric-card water">
+                    <h3>Water Usage</h3>
+                    <div class="metric-value" id="avgWater">--</div>
+                    <div class="metric-subtitle">Liters/Building</div>
+                </div>
+                <div class="metric-card recycling">
+                    <h3>Waste Recycling</h3>
+                    <div class="metric-value" id="avgRecycling">--</div>
+                    <div class="metric-subtitle">%</div>
+                </div>
+                <div class="metric-card occupancy">
+                    <h3>Occupancy Rate</h3>
+                    <div class="metric-value" id="avgOccupancy">--</div>
+                    <div class="metric-subtitle">%</div>
+                </div>
+            </div>
+
+            <div class="building-list">
+                <h2>Building Overview</h2>
+                <div class="building-cards" id="buildingCards">
+                    <!-- Building cards will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Management System - Visual Analytics</title>
+    <link rel="stylesheet" href="nav-styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Building Analytics</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Dashboard</a>
+            <a href="navigation.html" class="nav-link active">Visual Analytics</a>
+            <a href="#reports" class="nav-link">Reports</a>
+        </div>
+    </nav>
+    <div class="metrics-info-icon" id="metricsInfoIcon" title="Show Model Metrics">ℹ️ Model Metrics</div>
+    <div id="metricsModal" class="metrics-modal" style="display:none;">
+        <div class="metrics-modal-content">
+            <span class="metrics-modal-close" id="metricsModalClose">&times;</span>
+            <h3>Model Performance Metrics</h3>
+            <div id="metricsContent">
+                <!-- Metrics will be loaded here -->
+            </div>
+        </div>
+    </div>
+    <div class="main-analytics-layout">
+        <aside class="filter-sidebar">
+            <h3>Filters</h3>
+            <div id="mainFilters">
+                <select id="areaFilterNav">
+                    <option value="">All Areas</option>
+                </select>
+                <select id="buildingTypeFilterNav">
+                    <option value="">All Building Types</option>
+                </select>
+                <select id="statusFilterNav">
+                    <option value="">All Statuses</option>
+                </select>
+                <select id="yearFilterNav">
+                    <option value="">All Years</option>
+                </select>
+                <button id="showClustersBtn" class="analytics-btn" style="margin:0.5rem 0;">Clusters</button>
+            </div>
+            <button id="toggleExtraFilters" class="filter-icon" title="Show more filters">+</button>
+            <div id="extraFiltersNav" style="display:none;">
+                <select id="priorityFilterNav">
+                    <option value="">All Priorities</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <select id="greenFilterNav">
+                    <option value="">Green Certified?</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+                <input type="number" id="minFloorsNav" placeholder="Min Floors" min="0">
+                <input type="number" id="maxFloorsNav" placeholder="Max Floors" min="0">
+                <input type="number" id="minDevicesNav" placeholder="Min Devices" min="0">
+                <input type="number" id="maxDevicesNav" placeholder="Max Devices" min="0">
+                <input type="number" id="minOccupancyNav" placeholder="Min Occupancy %" min="0" max="100">
+                <input type="number" id="maxOccupancyNav" placeholder="Max Occupancy %" min="0" max="100">
+                <input type="number" id="minEnergyNav" placeholder="Min Energy kWh/m²" min="0">
+                <input type="number" id="maxEnergyNav" placeholder="Max Energy kWh/m²" min="0">
+            </div>
+            <button id="applyFiltersNav" class="analytics-btn" style="margin-top:1rem;">Apply Filters</button>
+            <button id="resetBtnNav" class="reset-btn" style="margin-top:0.5rem;">Reset</button>
+        </aside>
+        <div class="visualization-container">
+            <div class="visualization-section">
+                <h2>Building Age Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="ageDistributionChart"></canvas>
+                </div>
+            </div>
+            <div class="visualization-section">
+                <h2>Energy Consumption by Building Type</h2>
+                <div class="chart-container">
+                    <canvas id="energyConsumptionChart"></canvas>
+                </div>
+            </div>
+            <div class="visualization-section">
+                <h2>Building Status Overview</h2>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+            <div class="visualization-section">
+                <h2>Area-wise Building Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="areaDistributionChart"></canvas>
+                </div>
+            </div>
+            <div class="visualization-section">
+                <h2>ML Predictions</h2>
+                <div class="prediction-form">
+                    <h3>Check Suitability for a New Building</h3>
+                    <form id="predictionForm">
+                        <div class="form-group">
+                            <label for="predBuildingType">Building Type:</label>
+                            <select id="predBuildingType" required>
+                                <option value="">Select Type</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="predArea">Area:</label>
+                            <select id="predArea" required>
+                                <option value="">Select Area</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="predFloors">Number of Floors:</label>
+                            <input type="number" id="predFloors" min="1" required>
+                        </div>
+                        <button type="submit" class="analytics-btn">Check Suitability</button>
+                    </form>
+                    <div id="predictionResults" class="prediction-results" style="display: none;">
+                        <h3>Suitability Result</h3>
+                        <div class="result-item">
+                            <span id="suitabilityMessage" class="result-value"></span>
+                        </div>
+                        <div class="result-item" id="existingCountContainer" style="display:none;">
+                            <span class="result-label">Existing similar buildings in this area:</span>
+                            <span id="existingCount" class="result-value"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="visualization-section">
+                <h2>Area Recommendation</h2>
+                <div class="recommendation-form">
+                    <h3>Find the Best Area for Your Building</h3>
+                    <form id="recommendationForm">
+                        <div class="form-group">
+                            <label for="recBuildingType">Building Type:</label>
+                            <select id="recBuildingType" required>
+                                <option value="">Select Type</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="recOutcome">Desired Outcome:</label>
+                            <select id="recOutcome" required>
+                                <option value="">Select Outcome</option>
+                                <option value="Occupancy_Rate">High Occupancy</option>
+                                <option value="Energy_Consumption_Per_SqM">Low Energy Consumption</option>
+                                <option value="Maintenance_Priority">Low Maintenance Priority</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="analytics-btn">Recommend Area</button>
+                    </form>
+                    <div id="recommendationResults" class="recommendation-results" style="display: none;">
+                        <h3>Recommended Area(s)</h3>
+                        <div id="recAreaList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="nav-script.js"></script>
+</body>
+</html> 
